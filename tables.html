@@ -57,16 +57,21 @@
         $.get("/api/viewtables", function (data) {
             console.log(data);
             if (data) {
+                $("#current-reservations").empty();
                 for (var i = 0; i < data.length; i++) {
                     var reservationDiv = $('<div>');
                     var name = $("<p>").html("name: " + data[i].name);
                     var phone = $("<p>").html("phone: " + data[i].phoneNumber);
                     var email = $("<p>").html("email: " + data[i].email);
                     var reservationID = $("<p>").html("Reservation ID: " + data[i].uniqueID);
+                    var deletebutton = $('<button> delete </button>');
+                    deletebutton.attr('id', 'btn-' + i);
+                    deletebutton.attr('class', 'btn btn-primary btn-lg btn-delete');
                     reservationDiv.append(name);
                     reservationDiv.append(phone);
                     reservationDiv.append(email);
                     reservationDiv.append(reservationID);
+                    reservationDiv.append(deletebutton);
                     reservationDiv.append('<hr>');
                     $("#current-reservations").append(reservationDiv);
 
@@ -80,6 +85,7 @@
             $.get("/api/waitlist", function (data) {
                 console.log(data);
                 if (data) {
+                    $("#wait-list-res").empty();
                     for (var i = 0; i < data.length; i++) {
                         var reservationDiv = $('<div>');
                     var name = $("<p>").html("name: " + data[i].name);
@@ -101,10 +107,34 @@
 
         });
 
-
-
-
+        
     });
+    $(document).on("click", ".btn-delete", function () {
+    // $('#btn-0').on('click', function(event){
+                // event.preventDefault();
+                var id = this.id.replace('btn-',"");
+                $.post("/api/delete" , {"id": id}).then(function(data) {
+                    $("#current-reservations").empty();
+                    for (var i = 0; i < data.length; i++) {
+                        var reservationDiv = $('<div>');
+                        var name = $("<p>").html("name: " + data[i].name);
+                        var phone = $("<p>").html("phone: " + data[i].phoneNumber);
+                        var email = $("<p>").html("email: " + data[i].email);
+                        var reservationID = $("<p>").html("Reservation ID: " + data[i].uniqueID);
+                        var deletebutton = $('<button> delete </button>');
+                        deletebutton.attr('id', 'btn-' + i);
+                        deletebutton.attr('class', 'btn btn-primary btn-lg btn-delete');
+                        reservationDiv.append(name);
+                        reservationDiv.append(phone);
+                        reservationDiv.append(email);
+                        reservationDiv.append(reservationID);
+                        reservationDiv.append(deletebutton);
+                        reservationDiv.append('<hr>');
+                        $("#current-reservations").append(reservationDiv);
+
+                }
+                });
+            });
 
 </script>
 

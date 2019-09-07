@@ -36,6 +36,13 @@ app.get("/api/reserve", function(req, res) {
   res.sendFile(path.join(__dirname, "reserve.html"));
 });
 
+app.post("/api/delete", function(req, res) {
+  var id = req.body.id;
+  console.log("delete", tables[id]);
+  tables.splice(id, 1);
+  return res.json(tables);
+});
+
 // Create New Reservation - takes in JSON input
 app.post("/api/reserve", function(req, res) {
   // req.body hosts is equal to the JSON post sent from the user
