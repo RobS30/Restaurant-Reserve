@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Restaurant Reserve</title>
+    <!-- Latest compiled and minified CSS & JS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<div class="container">
+    <div class="jumbotron">
+        <h1>Hot Restaurant</h1>
+        <h3>We only have 5 tables! Book your seat before they all are gone!</h3>
+        <hr />
+        <a href="/api/reserve"><button class="btn btn-primary btn-lg">
+                <span class="fa fa-align-justify"></span> Make Reservation
+            </button></a>
+        <a href="/"><button class="btn btn-danger btn-lg">
+                <span class="fa fa-book"></span> Home
+            </button></a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3><strong>Current Reservations</strong></h3>
+                </div>
+                <div class="card-body" id="current-reservations">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3><strong>Waitling List</strong></h3>
+                </div>
+                <div class="card-body" id="wait-list-res">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+</html>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $.get("/api/viewtables", function (data) {
+            console.log(data);
+            if (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var reservationDiv = $('<div>');
+                    var name = $("<p>").html("name: " + data[i].name);
+                    var phone = $("<p>").html("phone: " + data[i].phoneNumber);
+                    var email = $("<p>").html("email: " + data[i].email);
+                    var reservationID = $("<p>").html("Reservation ID: " + data[i].uniqueID);
+                    reservationDiv.append(name);
+                    reservationDiv.append(phone);
+                    reservationDiv.append(email);
+                    reservationDiv.append(reservationID);
+                    reservationDiv.append('<hr>');
+                    $("#current-reservations").append(reservationDiv);
+
+                }
+            }
+            else {
+                $("#current-reservations").html(`<p>No Reservations Available</p>`);
+            }
+
+
+            $.get("/api/waitlist", function (data) {
+                console.log(data);
+                if (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var reservationDiv = $('<div>');
+                    var name = $("<p>").html("name: " + data[i].name);
+                    var phone = $("<p>").html("phone: " + data[i].phoneNumber);
+                    var email = $("<p>").html("email: " + data[i].email);
+                    var reservationID = $("<p>").html("Reservation ID: " + data[i].uniqueID);
+                    reservationDiv.append(name);
+                    reservationDiv.append(phone);
+                    reservationDiv.append(email);
+                    reservationDiv.append(reservationID);
+                    reservationDiv.append('<hr>');
+                    $("#wait-list-res").append(reservationDiv);
+
+                    }
+                } else {
+                    $("#wait-list-res").html(`<p>No Reservations Available</p>`);
+                }
+            });
+
+        });
+
+
+
+
+    });
+
+</script>
+
+<!-- $.ajax({
+    url: queryURL,
+    method: "GET"
+})
+    .then(function (response) {
+        console.log(queryURL);
+        console.log(response);
+        var results = response.data;
+        for (var i = 0; i < results.length; i++) {
+            var reactionDiv = $("<div>"); 
+            var p = $("<p>").html("Rating: " + results[i].rating);
+            reactionDiv.append(p);
+        
+            $("#gifs-appear-here").prepend(reactionDiv);
+        }
+    });
+}); -->
